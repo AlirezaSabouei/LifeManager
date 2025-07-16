@@ -1,4 +1,4 @@
-@LifeManager.Api_HostAddress = http://localhost:5289
+@LifeManager.Api_HostAddress = http://localhost:5204
 
 GET {{LifeManager.Api_HostAddress}}/weatherforecast/
 Accept: application/json
