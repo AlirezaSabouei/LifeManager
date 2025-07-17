@@ -1,9 +1,9 @@
 using System.Reflection;
-using LifeManager.Application.Common.Interfaces;
-using LifeManager.Domain.Entities.Users;
+using Application.Common.Interfaces;
+using Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeManager.Infrustructure.Data;
+namespace Infrustructure.Data;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -15,5 +15,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    public Task<int> SaveChangesAsync()
+    {
+        return base.SaveChangesAsync();
     }
 }

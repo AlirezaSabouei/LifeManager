@@ -1,8 +1,10 @@
-using LifeManager.Domain.Entities.Users;
+using Domain.Entities.Users;
 
-namespace LifeManager.Application.Common.Interfaces;
+namespace Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    public DbSet<User> Users { get; set; }
+    DbSet<User> Users { get; set; }
+
+    Task<int> SaveChangesAsync();
 }

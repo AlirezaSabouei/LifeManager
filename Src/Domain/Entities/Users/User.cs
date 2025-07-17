@@ -1,6 +1,6 @@
-using LifeManager.Domain.Common;
+using Domain.Common;
 
-namespace LifeManager.Domain.Entities.Users;
+namespace Domain.Entities.Users;
 
 public class User : BaseAuditableEntity
 {

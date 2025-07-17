@@ -1,17 +1,15 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace LifeManager.Api.Controllers;
+namespace Api.Controllers;
 
 public class BaseApiController : ControllerBase
 {
     protected readonly IMapper _mapper;
+    protected ISender? Mediator;
 
-    public BaseApiController(IMapper mapper)
+    public BaseApiController(IMapper mapper, ISender mediator)
     {
+        Mediator = mediator;
         _mapper = mapper;
     }
-    protected ISender? _mediator;
-    protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 }

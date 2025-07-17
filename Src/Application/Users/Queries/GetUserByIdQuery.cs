@@ -1,14 +1,14 @@
-﻿using LifeManager.Application.Common.Interfaces;
-using LifeManager.Domain.Entities.Users;
+﻿using Application.Common.Interfaces;
+using Domain.Entities.Users;
 
-namespace LifeManager.Application.Users.Queries;
+namespace Application.Users.Queries;
 
-public record GetUserByIdQuery : IRequest<User>
+public record GetUserByIdQuery : IRequest<User?>
 {
     public int Id { get; set; }
 }
 
-public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User>
+public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User?>
 {
     private readonly IApplicationDbContext _applicationDbContext;
 
@@ -17,8 +17,8 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User>
         _applicationDbContext = applicationDbContext;
     }
 
-    public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<User?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _applicationDbContext.Users.FirstAsync(a => a.Id == request.Id);
+        return await _applicationDbContext.Users.FirstOrDefaultAsync(a => a.Id == request.Id);
     }
 }

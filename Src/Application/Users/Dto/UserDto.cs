@@ -1,6 +1,6 @@
-using LifeManager.Domain.Entities.Users;
+using Domain.Entities.Users;
 
-namespace LifeManager.Application.Users.Dto;
+namespace Application.Users.Dto;
 
 public class UserDto
 {

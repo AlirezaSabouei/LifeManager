@@ -1,48 +1,70 @@
-using RestSharp;
-using NUnit;
+using AcceptanceTests.Drivers;
 using NUnit.Framework;
+using System.Net.Http.Json;
+using Shouldly;
+using Application.Users.Dto;
+using Api;
 
-namespace LifeManager.AcceptanceTests.Controllers.Users;
+namespace AcceptanceTests.Controllers.Users;
 
 public class UserControllerTests
 {
-    private RestClient _restClient;
+    private UserDriver _userDriver;
+
+    public UserControllerTests()
+    {
+        var factory = new IntegrationsWebApplicationFactory<Program>();        
+        _userDriver = new UserDriver(factory);        
+    }
 
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
-        _restClient = new RestClient("http://localhost/api/users");
+        await _userDriver.ClearDatabaseAsync();
     }
 
-    // [Test]
-    // public async Task CreateUserAsync_InputIsValid_UserIsCreated()
-    // {
-    //     var request = new RestRequest(Method.Post);
-    //     request.AddJsonBody(new
-    //     {
-    //         Username = "testuser",
-    //         Email = "testuser@example.com",
-    //         Password = "TestPassword123!"
-    //     });
+    #region GetUserById
 
-    //     var response = await _restClient.ExecuteAsync(request);
-
-    //     Assert.That(response.IsSuccessful, Is.True);
-    //     Assert.That((int)response.StatusCode, Is.EqualTo(201));
-    // }
-
-    
     [Test]
-    public async Task GetUserByIdAsync_IdIsValid_UserIsReturned()
-    {        
-        var userId = 1; // Replace with a valid user ID as needed
-        var request = new RestRequest($"{userId}", Method.Get);
+    [TestCase(0)]
+    [TestCase(-1)]
+    [TestCase(-10)]
+    public async Task GetUserByIdAsync_IdIsNotValid_ExceptionIsRaised(int userId)
+    {
+        var response = await _userDriver.HttpClient.GetAsync($"api/v1/users/{userId}");
 
-        var response = await _restClient.ExecuteAsync(request);
-
-        Assert.That(response.IsSuccessful, Is.True);
-        Assert.That((int)response.StatusCode, Is.EqualTo(200));
-        Assert.That(response.Content, Is.Not.Null.And.Not.Empty);
+        response.IsSuccessStatusCode.ShouldBeFalse();
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
+        response.Content.ShouldNotBeNull();
+        (await response.Content.ReadAsStringAsync())
+            .ShouldContain("One or more validation errors occurred");
     }
+
+    [Test]
+    public async Task GetUserByIdAsync_IdIsValidAndUserExists_UserIsReturned()
+    {
+        var users = await _userDriver.AddUsersToDatabaseAsync();
+        var userId = users[0].Id;
+
+        var response = await _userDriver.HttpClient.GetAsync($"api/v1/users/{userId}");
+
+        response.IsSuccessStatusCode.ShouldBeTrue();
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+        response.Content.ShouldNotBeNull();
+        (await response.Content.ReadFromJsonAsync<UserDto>()).Id.ShouldBe(userId);
+    }
+
+    [Test]
+    public async Task GetUserByIdAsync_IdIsValidButUserDoesNotExist_Returned()
+    {
+        var userId = 100;
+
+        var response = await _userDriver.HttpClient.GetAsync($"api/v1/users/{userId}");
+
+        response.IsSuccessStatusCode.ShouldBeTrue();
+        response.StatusCode.ShouldBe(System.Net.HttpStatusCode.NoContent);
+    }
+
+    #endregion
 }
 
