@@ -15,7 +15,7 @@ public class UsersController : BaseApiController
     {
     }
 
-    [HttpGet("User/{id}")]
+    [HttpGet("{id}")]
     [ApiVersion("1.0")]
     public async Task<ActionResult<UserDto>> GetUserByIdAsync(int id)
     {

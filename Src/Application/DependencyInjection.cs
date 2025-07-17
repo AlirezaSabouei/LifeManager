@@ -3,11 +3,14 @@ using System.Reflection;
 
 namespace LifeManager.Application;
 
-public static class ConfigureServices
+public static class DependencyInjection
 {
     public static void AddApplicationServices(this IServiceCollection services)
     {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddMaps(Assembly.GetExecutingAssembly()); // scans for Profile classes
+        });
         // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         // services.AddMediatR(cfg => {
         //     cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

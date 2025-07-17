@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using LifeManager.Application;
 
 namespace LifeManager.Api
 {

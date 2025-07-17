@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3CF84840-4870-4608-A840-226AD37D380D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeManager.AcceptanceTests", "tests\acceptancetests\LifeManager.AcceptanceTests.csproj", "{0F15F8E7-E7BD-44C2-A411-6CB284877163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeManager.AcceptanceTests", "tests\acceptance\LifeManager.AcceptanceTests.csproj", "{0F15F8E7-E7BD-44C2-A411-6CB284877163}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9CDC5CE9-AEF2-4B69-929A-1B0B11550B2B}"
 EndProject
