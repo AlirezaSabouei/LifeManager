@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace LifeManager.Api
 {
@@ -30,6 +31,8 @@ namespace LifeManager.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddApplicationServices();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
