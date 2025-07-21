@@ -11,6 +11,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // 🔹 Inject Services of other layers
+        builder.Services.AddApplicationServices();
+        builder.Services.AddInfrustructureServices(builder.Configuration);
+
         // Add services to the container.
         builder.Services.AddControllers();
         // 🔹 Add API versioning
@@ -30,10 +34,6 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
-        // 🔹 Inject Services of other layers
-        builder.Services.AddApplicationServices();
-        builder.Services.AddInfrustructureServices(builder.Configuration);
 
         var app = builder.Build();
 

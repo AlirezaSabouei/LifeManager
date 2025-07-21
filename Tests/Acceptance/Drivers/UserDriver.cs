@@ -1,4 +1,5 @@
 ﻿using Api;
+using Application.Users.Dto;
 using AutoFixture;
 using Domain.Entities.Users;
 using System.Net.Http.Json;
@@ -7,15 +8,23 @@ namespace AcceptanceTests.Drivers;
 
 public class UserDriver(IntegrationsWebApplicationFactory<Program> factory) : DriverBase(factory)
 {
-    public async Task<List<User>> AddUsersToDatabaseAsync()
+    public async Task<User> AddUserToDatabaseAsync(User user)
     {
-        Fixture f = new();
-        var user1 = f.Build<User>().Create();
-        var user2 = f.Build<User>().Create();
-        await DbContext!.Users.AddAsync(user1);
-        await DbContext!.Users.AddAsync(user2);
+        await DbContext!.Users.AddAsync(user);
         await DbContext.SaveChangesAsync();
-        return DbContext.Users.ToList();
+        return (await DbContext.Users.FindAsync(user.Id))!;
+    }
+
+    public User CreateUserInstance()
+    {
+        Fixture fixture = new();
+        return fixture.Build<User>().Create();
+    }
+
+    public UserDto CreateUserDtoInstance()
+    {
+        Fixture fixture = new();
+        return fixture.Build<UserDto>().Create();
     }
 
     public async Task ClearDatabaseAsync()
@@ -24,10 +33,8 @@ public class UserDriver(IntegrationsWebApplicationFactory<Program> factory) : Dr
         await DbContext.SaveChangesAsync();
     }
 
-    public async Task<List<User>> GetUserAsync(int userId)
+    public User? GetUserFromDatabase(int userId)
     {
-        var response = await HttpClient.GetAsync($"Users/{userId}");
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<List<User>>();
+        return DbContext!.Users.FirstOrDefault(a => a.Id == userId);
     }
 }

@@ -6,12 +6,15 @@ public class UserDto
 {
     public int Id { get; set; }
     public required string Name { get; set; }
+    public string? TelegramId { get; set; }
 
     private class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>()
+                .ForMember(user => user.Name, opt => opt.MapFrom(userDto => userDto.Name.ToLower()))
+                .ReverseMap();
         }
     }    
 }
