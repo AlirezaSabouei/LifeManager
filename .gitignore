@@ -416,3 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Ignore appsettings.dev to prevent telegram bot token to be committed to server
+*.development.json

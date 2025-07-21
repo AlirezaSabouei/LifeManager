@@ -1,13 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Application.Users.Queries;
 using Domain.Entities.Users;
-using Microsoft.EntityFrameworkCore;
 using MockQueryable.NSubstitute;
 using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
-using System.Linq.Expressions;
-
 namespace UnitTests.Application.Users;
 
 public class GetUserByIdQueryHandlerTests

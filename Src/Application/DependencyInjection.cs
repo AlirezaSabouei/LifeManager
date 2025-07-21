@@ -12,6 +12,8 @@ public static class DependencyInjection
         {
             cfg.AddMaps(Assembly.GetExecutingAssembly()); // scans for Profile classes
         });
+        
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Infrustructure.Data;
+using Infrustructure.States;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,5 +19,6 @@ public static class DependencyInjection
                 builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name)
             ));
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IStateManager, StateManager>();
     }
 }
