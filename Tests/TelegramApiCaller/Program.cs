@@ -7,13 +7,24 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Newtonsoft.Json;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+
+// Build configuration
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)// Optional: read from system environment variables too
+    .Build();
+
+// Bind to strongly typed settings (optional)
+var settings = configuration.GetSection("Telegram");
 
 // See https://aka.ms/new-console-template for more information
 var _httpClient = new HttpClient();
 _httpClient.BaseAddress = new Uri("http://localhost:5204");
 
 using var cts = new CancellationTokenSource();
-var bot = new TelegramBotClient("452112119:AAHQDWCizZYBrJXoHf71lPxAyUy13jPSxNs", cancellationToken: cts.Token);
+
+var bot = new TelegramBotClient(settings.GetValue<string>("BotToken"), cancellationToken: cts.Token);
 var me = await bot.GetMe();
 bot.OnError += OnError;
 bot.OnMessage += OnMessage;
