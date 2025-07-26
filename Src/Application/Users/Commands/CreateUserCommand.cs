@@ -21,8 +21,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, User>
         CreateUserCommand request,
         CancellationToken cancellationToken)
     {
-        await _applicationDbContext.Users.AddAsync(request.User);
-        await _applicationDbContext.SaveChangesAsync();
+        if (!_applicationDbContext.Users.Any(a=>a.Id == request.User.Id))
+        {
+            await _applicationDbContext.Users.AddAsync(request.User);
+            await _applicationDbContext.SaveChangesAsync();
+        }
         return await _applicationDbContext.Users
             .FirstAsync(a=>a.Id == request.User.Id);
     }

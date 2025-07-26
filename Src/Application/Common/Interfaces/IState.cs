@@ -1,9 +1,9 @@
-using Telegram.Bot.Types;
+using Application.Updates.Commands;
 
 namespace Application.Common.Interfaces;
 
 public interface IState
 {
-    public string State { get; }
-    public Task HandleAsync(Message message);
+    public string StateText { get; }
+    public Task HandleAsync(ProcessUpdateCommand request);
 }

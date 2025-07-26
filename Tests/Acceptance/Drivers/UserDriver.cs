@@ -2,7 +2,6 @@
 using Application.Users.Dto;
 using AutoFixture;
 using Domain.Entities.Users;
-using System.Net.Http.Json;
 
 namespace AcceptanceTests.Drivers;
 

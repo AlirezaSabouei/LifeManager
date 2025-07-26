@@ -1,4 +1,5 @@
 using Application.Common.Behaviours;
+using Application.Updates.States;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -21,6 +22,10 @@ public static class DependencyInjection
             // cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             // cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-        });
+        });        
+        
+        services.AddScoped<Start>();
+        services.AddScoped<Water>();
+        services.AddScoped<Invalid>();
     }
 }
