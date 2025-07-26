@@ -5,7 +5,7 @@ namespace Application.Users.Queries;
 
 public record GetUserByIdQuery : IRequest<User?>
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 }
 
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User?>

@@ -5,18 +5,32 @@ using MockQueryable.NSubstitute;
 using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
+using UnitTests.Common;
+
 namespace UnitTests.Application.Users;
 
-public class GetUserByIdQueryHandlerTests
+public class GetUserByIdQueryHandlerTests : HandlerTestsBase<GetUserByIdQueryHandler, GetUserByIdQuery, User>
 {
     private IApplicationDbContext? _applicationDbContextMock;
 
     private User? _user = null;
 
-    [OneTimeSetUp]
-    public void InitDependencies()
+    protected override GetUserByIdQuery CreateRequest()
     {
-        _user = new() { Id = 1, Name = "Alireza" };
+        return new GetUserByIdQuery()
+        {
+            Id = _user!.Id
+        };
+    }
+
+    protected override GetUserByIdQueryHandler CreateHandler()
+    {
+        return new(_applicationDbContextMock!);
+    }
+
+    protected override void SetupDependencies()
+    {
+        _user = new User() { Id = 1, Name = "Name" };
         var users = new List<User> { _user };
         var mock = users.AsQueryable().BuildMockDbSet();
         _applicationDbContextMock = Substitute.For<IApplicationDbContext>();
@@ -26,13 +40,7 @@ public class GetUserByIdQueryHandlerTests
     [Test]
     public async Task Handle_UserExists_ReturnsUser()
     {
-        var query = new GetUserByIdQuery()
-        {
-            Id = _user!.Id
-        };
-        GetUserByIdQueryHandler handler = new(_applicationDbContextMock!);
-
-        var result = await handler.Handle(query, new CancellationToken());
+        var result = await Handler.Handle(Request, new CancellationToken());
 
         result.ShouldNotBeNull();
         result.ShouldBeEquivalentTo(_user);
@@ -41,13 +49,9 @@ public class GetUserByIdQueryHandlerTests
     [Test]
     public async Task Handle_UserDoesNotExists_ReturnsNull()
     {
-        var query = new GetUserByIdQuery()
-        {
-            Id = 112312
-        };
-        GetUserByIdQueryHandler handler = new(_applicationDbContextMock!);
+        Request.Id = 123123;
 
-        var result = await handler.Handle(query, new CancellationToken());
+        var result = await Handler.Handle(Request, new CancellationToken());
 
         result.ShouldBeNull();
     }

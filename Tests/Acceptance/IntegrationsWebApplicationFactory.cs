@@ -7,12 +7,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 using System.Data.Common;
+using Telegram.Bot;
+using NSubstitute;
+using Telegram.Bot.Types;
+using Application.Common.Interfaces;
 
 namespace AcceptanceTests;
 
 public class IntegrationsWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
+    public ITelegramBot TelegramBotMock { get; set; }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -43,6 +49,14 @@ public class IntegrationsWebApplicationFactory<TProgram>
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
+
+            TelegramBotMock = Substitute.For<ITelegramBot>();
+            var telegramBotClient = services.SingleOrDefault(
+                d => d.ServiceType ==
+                    typeof(ITelegramBot));
+            services.Remove(telegramBotClient!);
+            services.AddScoped<ITelegramBot>(a => { return TelegramBotMock; });
+
         });
 
         builder.UseEnvironment("Development");

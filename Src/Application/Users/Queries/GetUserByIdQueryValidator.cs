@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Application.Users.Queries;
+﻿namespace Application.Users.Queries;
 
 public class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
 {
@@ -11,7 +9,7 @@ public class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
                 .WithMessage("'{PropertyName}' must be provided.");
     }
 
-    public bool BeGreaterThanZero(int id)
+    public bool BeGreaterThanZero(long id)
     {
         return id > 0;
     }
